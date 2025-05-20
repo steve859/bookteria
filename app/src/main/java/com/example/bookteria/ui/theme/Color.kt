@@ -1,4 +1,4 @@
-package com.example.booker.ui.theme
+package com.example.bookteria.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

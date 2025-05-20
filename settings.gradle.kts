@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "booker"
+rootProject.name = "bookteria"
 include(":app")
  
