@@ -1,4 +1,4 @@
-package com.example.bookteria.api.models
+package com.soft.bookteria.api.models
 
 data class ExtraInfo (
     val image: String ="",

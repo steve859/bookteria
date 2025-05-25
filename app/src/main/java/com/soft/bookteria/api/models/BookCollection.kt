@@ -1,4 +1,4 @@
-package com.example.bookteria.api.models
+package com.soft.bookteria.api.models
 
 import androidx.annotation.Keep
 import androidx.annotation.OptIn

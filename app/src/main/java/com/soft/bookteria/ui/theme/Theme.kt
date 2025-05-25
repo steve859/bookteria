@@ -1,4 +1,4 @@
-package com.example.bookteria.ui.theme
+package com.soft.bookteria.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
