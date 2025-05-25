@@ -1,4 +1,4 @@
-package com.example.bookteria
+package com.soft.bookteria
 
 import org.junit.Test
 

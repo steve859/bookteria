@@ -1,4 +1,4 @@
-package com.example.bookteria
+package com.soft.bookteria
 
 import android.os.Bundle
 import androidx.activity.compose.setContent
@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import com.example.bookteria.ui.theme.BookteriaTheme
+import com.soft.bookteria.ui.theme.BookteriaTheme
 
 
 class MainActivity : AppCompatActivity()  {
