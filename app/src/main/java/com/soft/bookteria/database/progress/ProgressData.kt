@@ -1,10 +1,12 @@
 package com.soft.bookteria.database.progress
 
 import androidx.room.ColumnInfo
+import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.Locale
 
-data class ProgressObject (
+@Entity(tableName = "reader_table")
+data class ProgressData (
     @ColumnInfo(name = "library_object_id")
     val libraryObjectId: Int,
     @ColumnInfo(name = "last_chapter_index")
