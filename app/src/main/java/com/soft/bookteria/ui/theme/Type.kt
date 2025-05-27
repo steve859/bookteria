@@ -2,9 +2,11 @@ package com.soft.bookteria.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.soft.bookteria.R
 
 // Set of Material typography styles to start with
 val Typography = Typography(
@@ -32,3 +34,6 @@ val Typography = Typography(
     )
     */
 )
+
+val ptSerifFont = FontFamily(Font(R.font.pt_serif_regular))
+val loraFont = FontFamily(Font(R.font.lora_font))
