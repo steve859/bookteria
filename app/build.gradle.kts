@@ -71,4 +71,9 @@ dependencies {
     
     //Coil
     implementation(libs.coil.compose)
+    
+    //OkHttp
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging.interceptor)
+
 }

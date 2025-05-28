@@ -16,7 +16,7 @@ ksp = "2.1.21-2.0.1"
 hilt-navigation-compose = "1.2.0"
 roomCommonJvm = "2.7.1"
 coil = "2.7.0"
-
+okhttp = "4.12.0"
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -42,6 +42,11 @@ androidx-room-common-jvm = { group = "androidx.room", name = "room-common-jvm", 
 
 #coil
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
+
+#okhttp libraries
+okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
+okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
