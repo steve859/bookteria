@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import com.soft.bookteria.ui.screens.welcome.composables.WelcomeScreen
 import com.soft.bookteria.ui.theme.BookteriaTheme
 
 
@@ -25,7 +26,7 @@ class MainActivity : AppCompatActivity()  {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ){
-
+                
                 }
             }
         }
