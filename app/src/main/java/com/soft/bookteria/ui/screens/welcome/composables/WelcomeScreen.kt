@@ -22,18 +22,25 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.soft.bookteria.helpers.weakHapticFeedback
+import com.soft.bookteria.ui.navigation.BottomBarScreen
+import com.soft.bookteria.ui.screens.welcome.viewmodels.WelcomeViewModel
 import com.soft.bookteria.ui.theme.loraFont
 import com.soft.bookteria.ui.theme.ptSerifFont
 import java.nio.file.WatchEvent
 
 @Composable
 fun WelcomeScreen(navController: NavController) {
+    val viewModel: WelcomeViewModel = hiltViewModel()
+    val context = LocalContext.current
     Box(
         modifier = Modifier.fillMaxSize()
     ){
@@ -60,7 +67,12 @@ fun WelcomeScreen(navController: NavController) {
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center
         ){
-        
+            SelectionUI (
+                onClicked = {
+                    navController.popBackStack()
+                    navController.navigate(BottomBarScreen.Home.route)
+                }
+            )
         }
     }
 }
