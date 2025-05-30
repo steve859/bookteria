@@ -7,7 +7,6 @@ import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import okhttp3.Call
 import okhttp3.Callback
-import okhttp3.Dispatcher
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
@@ -66,17 +65,24 @@ class BookApi(context: Context) {
     }
     
     suspend fun getBookById(bookId: String): Result<BookCollection>{
-        val request = Request.Builder().get().url("${baseUrl}?id=$bookId").build()
+        val request = Request.Builder().get().url("${baseUrl}?ids=$bookId").build()
         return makeApiRequest(request)
     }
     
     suspend fun getAllBooks(
         page: Long,
     ): Result<BookCollection> {
-        var url = "${baseUrl}?page=$page"
+        val url = "${baseUrl}?page=$page"
         val request = Request.Builder().get().url(url).build()
         return makeApiRequest(request)
     }
     
-    
+    suspend fun getBookByCategory(
+        category: String,
+        page: Long
+    ): Result<BookCollection>{
+        val url = "${baseUrl}?page=$page&topic=$category"
+        val request = Request.Builder().get().url(url).build()
+        return makeApiRequest(request)
+    }
 }
