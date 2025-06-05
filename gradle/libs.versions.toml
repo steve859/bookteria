@@ -17,6 +17,8 @@ hilt-navigation-compose = "1.2.0"
 roomCommonJvm = "2.7.1"
 coil = "2.7.0"
 okhttp = "4.12.0"
+playServicesCastTv = "21.1.1"
+books = "1.0.0"
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -46,6 +48,8 @@ coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 #okhttp libraries
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
+play-services-cast-tv = { group = "com.google.android.gms", name = "play-services-cast-tv", version.ref = "playServicesCastTv" }
+books = { group = "com.google.android.mediahome", name = "books", version.ref = "books" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

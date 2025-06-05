@@ -17,7 +17,7 @@ import kotlin.coroutines.suspendCoroutine
 import okhttp3.logging.HttpLoggingInterceptor
 import java.net.URLEncoder
 
-class BookApi(context: Context) {
+open class BookApi(context: Context) {
     private val baseUrl = "https://gutenberg-backend-o7ffixyxs-steve859s-projects.vercel.app/books"
     
     private val okHttpClient by lazy {
@@ -56,7 +56,7 @@ class BookApi(context: Context) {
         })
     }
     
-    suspend fun searchBooks(query: String): Result<BookCollection>{
+    open suspend fun searchBooks(query: String): Result<BookCollection>{
         val encodedString = withContext(Dispatchers.IO){
             URLEncoder.encode(query, "UTF-8")
         }
@@ -69,7 +69,7 @@ class BookApi(context: Context) {
         return makeApiRequest(request)
     }
     
-    suspend fun getAllBooks(
+    open suspend fun getAllBooks(
         page: Long,
     ): Result<BookCollection> {
         val url = "${baseUrl}?page=$page"
@@ -77,7 +77,7 @@ class BookApi(context: Context) {
         return makeApiRequest(request)
     }
     
-    suspend fun getBookByCategory(
+    open suspend fun getBookByCategory(
         category: String,
         page: Long
     ): Result<BookCollection>{
