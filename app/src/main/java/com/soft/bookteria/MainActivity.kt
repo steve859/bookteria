@@ -10,8 +10,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.soft.bookteria.ui.screens.welcome.composables.WelcomeScreen
 import com.soft.bookteria.ui.theme.BookteriaTheme
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity()  {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

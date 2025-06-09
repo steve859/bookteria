@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.Bookteria" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.Bookteria" parent="Theme.Material3.Light.NoActionBar">
+        <!-- Tùy chỉnh màu sắc, font, v.v. ở đây -->
+        <item name="colorPrimary">@color/teal_200</item>
+        <item name="colorSecondary">@color/purple_200</item>
+        <!-- ... -->
+    </style>
 </resources>
