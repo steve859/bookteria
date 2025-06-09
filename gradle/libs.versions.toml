@@ -5,10 +5,10 @@ coreKtx = "1.16.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
-lifecycleRuntimeKtx = "2.9.0"
+lifecycleRuntimeKtx = "2.9.1"
 activityCompose = "1.10.1"
-composeBom = "2025.05.01"
-appcompat = "1.7.0"
+composeBom = "2025.06.00"
+appcompat = "1.7.1"
 kotlinx-serialization = "1.8.1"
 navigationRuntimeAndroid = "2.9.0"
 hilt = "2.56.2"
@@ -19,6 +19,10 @@ coil = "2.7.0"
 okhttp = "4.12.0"
 playServicesCastTv = "21.1.1"
 books = "1.0.0"
+android-material = "1.12.0"
+custom-activity-on-crash = "2.4.0"
+roomRuntimeAndroid = "2.7.1"
+
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -44,6 +48,7 @@ androidx-room-common-jvm = { group = "androidx.room", name = "room-common-jvm", 
 
 #coil
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
+custom-activity-on-crash = {module = "cat.ereza:customactivityoncrash", version.ref = "custom-activity-on-crash"}
 
 #okhttp libraries
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
@@ -51,6 +56,9 @@ okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-i
 play-services-cast-tv = { group = "com.google.android.gms", name = "play-services-cast-tv", version.ref = "playServicesCastTv" }
 books = { group = "com.google.android.mediahome", name = "books", version.ref = "books" }
 
+# androdi material
+android-material = { module = "com.google.android.material:material", version.ref = "android-material" }
+androidx-room-runtime-android = { group = "androidx.room", name = "room-runtime-android", version.ref = "roomRuntimeAndroid" }
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

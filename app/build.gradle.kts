@@ -57,6 +57,7 @@ dependencies {
     implementation(libs.androidx.room.common.jvm)
     implementation(libs.play.services.cast.tv)
     implementation(libs.books)
+    implementation(libs.androidx.room.runtime.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -77,5 +78,11 @@ dependencies {
     //OkHttp
     implementation(libs.okhttp)
     implementation(libs.okhttp.logging.interceptor)
-
+    
+    //Android Material
+    implementation(libs.android.material)
+    
+    //CustomActivityOnCrash
+    implementation(libs.custom.activity.on.crash)
 }
+

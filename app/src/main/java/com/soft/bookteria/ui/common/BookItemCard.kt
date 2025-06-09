@@ -82,7 +82,7 @@ fun BookItemCard(
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current).data(coverImageUrl)
                         .crossfade(true).build(),
-                    placeholder = painterResource(id = R.drawable.placeholder),
+                    placeholder = painterResource(id = R.drawable.ic_placeholder),
                     contentDescription = stringResource(id = R.string.cover_image),
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.Crop
