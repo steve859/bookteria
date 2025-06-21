@@ -84,5 +84,8 @@ dependencies {
     
     //CustomActivityOnCrash
     implementation(libs.custom.activity.on.crash)
+
+    //Material Icons Extended
+    implementation("androidx.compose.material:material-icons-extended")
 }
 

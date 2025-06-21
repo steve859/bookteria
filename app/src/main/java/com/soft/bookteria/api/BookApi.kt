@@ -18,7 +18,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import java.net.URLEncoder
 
 open class BookApi(context: Context) {
-    private val baseUrl = "https://gutenberg-backend-o7ffixyxs-steve859s-projects.vercel.app/books"
+    private val baseUrl = "https://gutendex.com/books/"
     
     private val okHttpClient by lazy {
         OkHttpClient.Builder()

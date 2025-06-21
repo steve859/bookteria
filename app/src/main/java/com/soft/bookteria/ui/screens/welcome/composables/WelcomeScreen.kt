@@ -36,6 +36,7 @@ import com.soft.bookteria.ui.screens.welcome.viewmodels.WelcomeViewModel
 import com.soft.bookteria.ui.theme.loraFont
 import com.soft.bookteria.ui.theme.ptSerifFont
 import java.nio.file.WatchEvent
+import com.soft.bookteria.ui.navigation.NavigationScreens
 
 @Composable
 fun WelcomeScreen(navController: NavController) {
@@ -69,8 +70,11 @@ fun WelcomeScreen(navController: NavController) {
         ){
             SelectionUI (
                 onClicked = {
-                    navController.popBackStack()
-                    navController.navigate(BottomBarScreen.Home.route)
+                    navController.navigate("main_screen") {
+                        popUpTo(NavigationScreens.WelcomeScreen.route) {
+                            inclusive = true
+                        }
+                    }
                 }
             )
         }
@@ -98,6 +102,7 @@ private fun SelectionUI(
         OutlinedButton(
             onClick = {
                 view.weakHapticFeedback()
+                onClicked()
             },
             modifier = Modifier
                 .width(200.dp)

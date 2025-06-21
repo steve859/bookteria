@@ -8,13 +8,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import com.soft.bookteria.ui.screens.welcome.composables.WelcomeScreen
+import androidx.navigation.compose.rememberNavController
+import com.soft.bookteria.ui.navigation.BottomBarScreen
+import com.soft.bookteria.ui.navigation.NavigationGraph
+import com.soft.bookteria.ui.navigation.NavigationScreens
+import com.soft.bookteria.ui.screens.main.MainScreen
 import com.soft.bookteria.ui.theme.BookteriaTheme
 import dagger.hilt.android.AndroidEntryPoint
 
-
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity()  {
+class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -22,13 +25,19 @@ class MainActivity : AppCompatActivity()  {
 //
 //        }
         enableEdgeToEdge()
-        setContent{
+        setContent {
             BookteriaTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
-                ){
-                
+                ) {
+                    val navController = rememberNavController()
+                    
+                    // Start with welcome screen
+                    NavigationGraph(
+                        startDestination = NavigationScreens.WelcomeScreen.route,
+                        navController = navController
+                    )
                 }
             }
         }

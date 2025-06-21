@@ -3,6 +3,8 @@ package com.soft.bookteria.ui.screens.main
 import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -15,6 +17,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -24,11 +28,13 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.soft.bookteria.helpers.NetworkObserver
 import com.soft.bookteria.ui.navigation.BottomBarScreen
+import com.soft.bookteria.ui.screens.categories.composables.CategoriesScreen
 import com.soft.bookteria.ui.screens.home.composables.HomeScreenContainer
+import com.soft.bookteria.ui.screens.library.composables.MyLibraryScreen
+import com.soft.bookteria.ui.screens.settings.composables.SettingsScreen
 
 @Composable
 fun MainScreen(
-    intent: Intent,            // Nếu bạn cần xử lý intent, có thể truyền vào
     startDestination: String,  // Ví dụ: BottomBarScreen.Home.route
     networkStatus: NetworkObserver.Status  // Trạng thái mạng
 ) {
@@ -57,23 +63,24 @@ fun MainScreen(
                     backState = remember { mutableStateOf(false) }
                 )
             }
-//            // Tab Categories (placeholder)
-//            composable(route = BottomBarScreen.Categories.route) {
-//                CategoriesScreen()
-//            }
-//            // Tab Library (placeholder)
-//            composable(route = BottomBarScreen.Library.route) {
-//                LibraryScreen()
-//            }
-//            // Tab Settings (placeholder)
-//            composable(route = BottomBarScreen.Settings.route) {
-//                SettingsScreen()
-//            }
+            
+            // Tab Categories
+            composable(route = BottomBarScreen.Categories.route) {
+                CategoriesScreen(navController = navController)
+            }
+            
+            // Tab Library
+            composable(route = BottomBarScreen.Library.route) {
+                MyLibraryScreen(navController = navController)
+            }
+            
+            // Tab Settings
+            composable(route = BottomBarScreen.Settings.route) {
+                SettingsScreen(navController = navController)
+            }
         }
     }
 }
-
-
 
 @Composable
 private fun BottomNavigationBar(navController: NavHostController) {
@@ -87,7 +94,8 @@ private fun BottomNavigationBar(navController: NavHostController) {
     val currentRoute = navBackStackEntry?.destination?.route
     
     NavigationBar(
-        containerColor = MaterialTheme.colorScheme.surfaceVariant
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+        modifier = Modifier.height(64.dp)
     ) {
         screens.forEach { screen ->
             val selected = currentRoute == screen.route
@@ -95,10 +103,15 @@ private fun BottomNavigationBar(navController: NavHostController) {
                 icon = {
                     Icon(
                         painter = painterResource(id = screen.icon),
-                        contentDescription = stringResource(id = screen.title)
+                        contentDescription = stringResource(id = screen.title),
+                        modifier = Modifier.size(20.dp)
                     )
                 },
-                label = { androidx.compose.material3.Text(text = stringResource(id = screen.title)) },
+                label = { 
+                    androidx.compose.material3.Text(
+                        text = stringResource(id = screen.title)
+                    ) 
+                },
                 selected = selected,
                 onClick = {
                     // Khi nhấn một tab, chuyển đến route tương ứng
