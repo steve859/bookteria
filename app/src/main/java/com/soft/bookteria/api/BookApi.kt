@@ -64,7 +64,7 @@ open class BookApi(context: Context) {
         return makeApiRequest(request)
     }
     
-    suspend fun getBookById(bookId: String): Result<BookCollection>{
+    suspend fun getBookById(bookId: Long): Result<BookCollection>{
         val request = Request.Builder().get().url("${baseUrl}?ids=$bookId").build()
         return makeApiRequest(request)
     }
@@ -85,4 +85,6 @@ open class BookApi(context: Context) {
         val request = Request.Builder().get().url(url).build()
         return makeApiRequest(request)
     }
+    
+    
 }

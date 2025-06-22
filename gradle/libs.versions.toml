@@ -22,6 +22,7 @@ books = "1.0.0"
 android-material = "1.12.0"
 custom-activity-on-crash = "2.4.0"
 roomRuntimeAndroid = "2.7.1"
+roomKtx = "2.7.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -59,6 +60,7 @@ books = { group = "com.google.android.mediahome", name = "books", version.ref = 
 # androdi material
 android-material = { module = "com.google.android.material:material", version.ref = "android-material" }
 androidx-room-runtime-android = { group = "androidx.room", name = "room-runtime-android", version.ref = "roomRuntimeAndroid" }
+androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomKtx" }
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

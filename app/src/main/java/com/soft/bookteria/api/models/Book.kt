@@ -28,5 +28,9 @@ data class Book (
     @SerialName("title")
     val title: String,
     @SerialName("formats")
-    val formats: Formats
+    val formats: Formats,
+    @SerialName("summaries")
+    val summaries: List<String>,
+    @SerialName("image/jpeg")
+    val imageJpeg: String? = null
 )

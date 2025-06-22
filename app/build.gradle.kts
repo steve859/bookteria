@@ -58,6 +58,7 @@ dependencies {
     implementation(libs.play.services.cast.tv)
     implementation(libs.books)
     implementation(libs.androidx.room.runtime.android)
+    implementation(libs.androidx.room.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
