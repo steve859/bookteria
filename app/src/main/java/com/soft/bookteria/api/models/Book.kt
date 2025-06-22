@@ -14,15 +14,15 @@ data class Book (
     @SerialName("bookshelves")
     val bookshelves: List<String>,
     @SerialName("copyright")
-    val copyright: Boolean,
+    val copyright: Boolean? = null,
     @SerialName("download_count")
     val downloadCount: Int,
     @SerialName("id")
-    val id: Int,
+    var id: Long,
     @SerialName("languages")
     val languages: List<String>,
     @SerialName("media_type")
-    val mediaType: String,
+    val mediaType: String? = null,
     @SerialName("subjects")
     val subjects: List<String>,
     @SerialName("title")

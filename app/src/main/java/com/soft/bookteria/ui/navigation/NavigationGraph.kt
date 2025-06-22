@@ -35,7 +35,8 @@ fun NavigationGraph(
         ) {
             MainScreen(
                 startDestination = BottomBarScreen.Home.route,
-                networkStatus = NetworkObserver.Status.Avaiable // TODO: Get from NetworkObserver
+                networkStatus = NetworkObserver.Status.Avaiable, // TODO: Get from NetworkObserver
+                navController = navController // Truyền NavController cấp cao nhất vào
             )
         }
         

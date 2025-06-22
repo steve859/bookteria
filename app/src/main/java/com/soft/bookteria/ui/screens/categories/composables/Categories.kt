@@ -3,7 +3,7 @@ package com.soft.bookteria.ui.screens.categories.composables
 import com.soft.bookteria.R
 
 sealed class Categories(val category: String, val nameResource: Int) {
-    data object Animal : Categories("animal", R.string.category_animal)
+    data object Animal : Categories("animals", R.string.category_animal)
     data object Children : Categories("children", R.string.category_children)
     data object Classics : Categories("classics", R.string.category_classics)
     data object Countries : Categories("countries", R.string.category_countries)
