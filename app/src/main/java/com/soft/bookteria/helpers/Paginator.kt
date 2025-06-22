@@ -3,18 +3,17 @@ package com.soft.bookteria.helpers
 class Paginator<Page, BookCollection>(
     private val initialPage: Page,
     private val loadPage: suspend (Page) -> Result<BookCollection>,
-    private val getNextPage: suspend (BookCollection) -> Page,
-    private val onError: suspend (Throwable?) -> Unit,
-    private val onSuccess: suspend (BookCollection, Long) -> Unit,
-    private val onLoadingChanged: (Boolean) -> Unit,
-    private val onDataLoaded: (BookCollection) -> Unit,
-    private val onLoadUpdated: (Boolean) -> Unit,
-    private val onRequest: suspend (nextPage: Page) -> Result<BookCollection>
-    ){
+    private val getNextPage: (BookCollection) -> Page?,
+    private val onError: (Throwable?) -> Unit,
+    private val onSuccess: (BookCollection, Page) -> Unit,
+    private val onLoadingChanged: (Boolean) -> Unit
+) {
     private var currentPage = initialPage
     private var isLoading = false
-    suspend fun loadNext() {
+    
+    suspend fun loadNextItems() {
         if (isLoading) return
+        
         isLoading = true
         onLoadingChanged(true)
         
@@ -24,9 +23,9 @@ class Paginator<Page, BookCollection>(
         
         result.fold(
             onSuccess = { data ->
-                onDataLoaded(data)
-                getNextPage(data)?.let {
-                    currentPage = it
+                onSuccess(data, currentPage)
+                getNextPage(data)?.let { nextPage ->
+                    currentPage = nextPage
                 }
             },
             onFailure = { error ->
@@ -37,5 +36,6 @@ class Paginator<Page, BookCollection>(
     
     fun reset() {
         currentPage = initialPage
+        isLoading = false
     }
 }

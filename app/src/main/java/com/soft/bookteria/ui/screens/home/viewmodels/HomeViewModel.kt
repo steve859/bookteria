@@ -51,7 +51,11 @@ open class HomeViewModel @Inject constructor(
         },
         getNextPage = { bookCollection ->
             // Return next page number, or null if no more pages
-            allBooksState.page + 1L
+            if (bookCollection.books.isNotEmpty()) {
+                allBooksState.page + 1L
+            } else {
+                null
+            }
         },
         onError = { error ->
             allBooksState = allBooksState.copy(
@@ -80,26 +84,12 @@ open class HomeViewModel @Inject constructor(
         },
         onLoadingChanged = { isLoading ->
             allBooksState = allBooksState.copy(isLoading = isLoading)
-        },
-        onDataLoaded = { bookSet ->
-            // Handle data loaded if needed
-        },
-        onLoadUpdated = { isLoading ->
-            allBooksState = allBooksState.copy(isLoading = isLoading)
-        },
-        onRequest = { nextPage ->
-            try {
-                if (nextPage == 1L) delay(400L)
-                bookAPI.getAllBooks(nextPage)
-            } catch (exc: Exception) {
-                Result.failure(exc)
-            }
         }
     )
     
     fun loadNextItems() {
         viewModelScope.launch {
-            pagination.loadNext()
+            pagination.loadNextItems()
         }
     }
     
