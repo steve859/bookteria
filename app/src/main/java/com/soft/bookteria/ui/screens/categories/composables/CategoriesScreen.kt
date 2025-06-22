@@ -22,6 +22,7 @@ import androidx.navigation.compose.rememberNavController
 import com.soft.bookteria.R
 import com.soft.bookteria.ui.navigation.NavigationScreens
 import com.soft.bookteria.ui.screens.categories.viewmodel.CategoriesViewModel
+import com.soft.bookteria.ui.theme.BookteriaTheme
 import com.soft.bookteria.ui.theme.ptSerifFont
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -105,9 +106,11 @@ private fun CategoriesItem(category: String, onClick: () -> Unit) {
     }
 }
 
-@ExperimentalMaterial3Api
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Preview(showBackground = true)
 fun CategoriesScreenPreview() {
-    CategoriesScreen(rememberNavController())
+    BookteriaTheme {
+        CategoriesScreen(rememberNavController())
+    }
 }

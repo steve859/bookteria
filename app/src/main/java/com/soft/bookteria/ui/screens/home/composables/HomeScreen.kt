@@ -75,16 +75,40 @@ fun HomeScreen(
     navController: NavController,
     networkStatus: NetworkObserver.Status
 ) {
-    //lay instance ViewModel
     val viewModel: HomeViewModel = hiltViewModel()
+
+    // Pass viewmodel to container
+    HomeScreenContainer(
+        viewModel = viewModel,
+        networkStatus = networkStatus,
+        navController = navController,
+        backState = remember { mutableStateOf(false) }
+    )
+}
+
+
+@Composable
+public fun HomeScreenContainer(
+    viewModel: HomeViewModel,
+    networkStatus: NetworkObserver.Status,
+    navController: NavController,
+    backState: MutableState<Boolean>
+) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
     
-    //load trang sach dau tien
-    LaunchedEffect(Unit) {
-        viewModel.loadNextItems()
+    // 6. Lấy state từ ViewModel
+    val searchState: SearchBarStates by remember { viewModel::searchBarState }
+    val allBooksState: AllBooksStates by remember { viewModel::allBooksState }
+
+    // Tải sách khi màn hình được hiển thị lần đầu
+    LaunchedEffect(key1 = true) {
+        if (allBooksState.items.isEmpty()) {
+            viewModel.loadNextItems()
+        }
     }
     
     //dong search bar truoc khi tat app
-    val backState = remember { mutableStateOf(false) }
     BackHandler(enabled = backState.value) {
         if (viewModel.searchBarState.isVisible) { // mo searchbar co text -> xoa text
             if (viewModel.searchBarState.text.isNotEmpty()) {
@@ -103,29 +127,6 @@ fun HomeScreen(
             viewModel.onAction(UserAction.CloseClicked)
         }
     }
-    
-    HomeScreenContainer(
-        viewModel = viewModel,
-        networkStatus = networkStatus,
-        navController = navController,
-        backState = backState
-    )
-}
-
-
-@Composable
-public fun HomeScreenContainer(
-    viewModel: HomeViewModel,
-    networkStatus: NetworkObserver.Status,
-    navController: NavController,
-    backState: MutableState<Boolean>
-) {
-    val keyboardController = LocalSoftwareKeyboardController.current
-    val focusManager = LocalFocusManager.current
-    
-    // 6. Lấy state từ ViewModel
-    val searchState: SearchBarStates by remember { viewModel::searchBarState }
-    val allBooksState: AllBooksStates by remember { viewModel::allBooksState }
     
     Scaffold(
         modifier = Modifier
@@ -154,7 +155,7 @@ public fun HomeScreenContainer(
                             },
                             placeholder = {
                                 Text(
-                                    text = "Tìm kiếm sách...",
+                                    text = "Search Book...",
                                     fontFamily = ptSerifFont,
                                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                                 )
@@ -163,7 +164,7 @@ public fun HomeScreenContainer(
                             leadingIcon = {
                                 Icon(
                                     imageVector = Icons.Default.Search,
-                                    contentDescription = "Icon Tìm kiếm",
+                                    contentDescription = "Search Icon",
                                     tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                                 )
                             },
@@ -179,7 +180,7 @@ public fun HomeScreenContainer(
                                 }) {
                                     Icon(
                                         imageVector = Icons.Default.Clear,
-                                        contentDescription = "Đóng Search",
+                                        contentDescription = "Close Search",
                                         tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                                     )
                                 }
@@ -222,7 +223,7 @@ public fun HomeScreenContainer(
                             }) {
                                 Icon(
                                     imageVector = Icons.Default.Search,
-                                    contentDescription = "Mở thanh tìm kiếm",
+                                    contentDescription = "Open Searchbar",
                                     tint = MaterialTheme.colorScheme.onBackground
                                 )
                             }
@@ -439,9 +440,9 @@ class FakeBookApi(context: Context) : BookApi(context) {
     private val sampleBooks = listOf(
         Book(
             id = 100,
-            title = "Demo Book One",
-            authors = listOf(com.soft.bookteria.api.models.Author("Tác giả 1")),
-            subjects = listOf("Thể loại A"),
+            title = "Lap trinh huong doi tuong",
+            authors = listOf(com.soft.bookteria.api.models.Author("Tran Anh Dung")),
+            subjects = listOf("Coding"),
             bookshelves = emptyList(),
             copyright = false,
             downloadCount = 0,
@@ -453,9 +454,9 @@ class FakeBookApi(context: Context) : BookApi(context) {
         ),
         Book(
             id = 101,
-            title = "Demo Book Two",
-            authors = listOf(com.soft.bookteria.api.models.Author("Tác giả 2")),
-            subjects = listOf("Thể loại B"),
+            title = "NMLT",
+            authors = listOf(com.soft.bookteria.api.models.Author("Mai Tuan Kiet")),
+            subjects = listOf("Coding"),
             bookshelves = emptyList(),
             copyright = false,
             downloadCount = 0,

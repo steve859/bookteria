@@ -29,26 +29,26 @@ import androidx.navigation.compose.rememberNavController
 import com.soft.bookteria.helpers.NetworkObserver
 import com.soft.bookteria.ui.navigation.BottomBarScreen
 import com.soft.bookteria.ui.screens.categories.composables.CategoriesScreen
-import com.soft.bookteria.ui.screens.home.composables.HomeScreenContainer
+import com.soft.bookteria.ui.screens.home.composables.HomeScreen
 import com.soft.bookteria.ui.screens.library.composables.MyLibraryScreen
 import com.soft.bookteria.ui.screens.settings.composables.SettingsScreen
 
 @Composable
 fun MainScreen(
-    startDestination: String,  // Ví dụ: BottomBarScreen.Home.route
-    networkStatus: NetworkObserver.Status  // Trạng thái mạng
+    startDestination: String,
+    navController: NavHostController,
+    networkStatus: NetworkObserver.Status
 ) {
-    val navController = rememberNavController()
-    
-    // Scaffold bao quanh NavHost, với bottomBar được vẽ bởi BottomNavigationBar()
+    val bottomNavController = rememberNavController()
+
     Scaffold(
         modifier = Modifier.background(MaterialTheme.colorScheme.background),
         bottomBar = {
-            BottomNavigationBar(navController = navController)
+            BottomNavigationBar(navController = bottomNavController)
         }
     ) { innerPadding ->
         NavHost(
-            navController = navController,
+            navController = bottomNavController,
             startDestination = startDestination,
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.background)
@@ -56,11 +56,9 @@ fun MainScreen(
         ) {
             // Tab Home
             composable(route = BottomBarScreen.Home.route) {
-                HomeScreenContainer(
-                    viewModel = androidx.hilt.navigation.compose.hiltViewModel(),
+                HomeScreen(
                     networkStatus = networkStatus,
-                    navController = navController,
-                    backState = remember { mutableStateOf(false) }
+                    navController = navController
                 )
             }
             

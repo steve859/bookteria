@@ -1,5 +1,6 @@
 package com.soft.bookteria.ui.screens.categories.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -33,6 +34,7 @@ class CategoriesViewModel @Inject constructor(
     var state by mutableStateOf(CategoriesBookState())
     
     fun loadBookByCategory(category: String) {
+        Log.d("CategoriesViewModel", "Loading books for category: $category")
         if (!this::pagination.isInitialized || state.selectedCategory != category) {
             state = state.copy(
                 selectedCategory = category,
@@ -47,8 +49,12 @@ class CategoriesViewModel @Inject constructor(
                 loadPage = { page ->
                     try {
                         if (page == 1L) delay(400L)
-                        booksApi.getBookByCategory(category, page)
+                        Log.d("CategoriesViewModel", "Making API call for category: $category, page: $page")
+                        val result = booksApi.getBookByCategory(category, page)
+                        Log.d("CategoriesViewModel", "API result: $result")
+                        result
                     } catch (exc: Exception) {
+                        Log.e("CategoriesViewModel", "API error: ${exc.message}", exc)
                         Result.failure(exc)
                     }
                 },
@@ -60,14 +66,17 @@ class CategoriesViewModel @Inject constructor(
                     }
                 },
                 onError = { error ->
+                    Log.e("CategoriesViewModel", "Paginator error: ${error?.message}", error)
                     state = state.copy(
                         error = error?.localizedMessage ?: "Unknown error occurred"
                     )
                 },
                 onSuccess = { bookCollection, currentPage ->
+                    Log.d("CategoriesViewModel", "Received ${bookCollection.books.size} books for category: $category")
                     val books = bookCollection.books.filter {
                         it.formats.applicationepubzip != null
                     }
+                    Log.d("CategoriesViewModel", "Filtered to ${books.size} books with EPUB format")
                     
                     state = state.copy(
                         books = (state.books + books),

@@ -40,9 +40,6 @@ open class HomeViewModel @Inject constructor(
         initialPage = 1L,
         loadPage = { page ->
             try {
-                // Only add delay when loading first page to show shimmer effect
-                // and avoid flickering when navigating to home from welcome screen
-                // and immediately loading the first page.
                 if (page == 1L) delay(400L)
                 bookAPI.getAllBooks(page) // Fixed to English only
             } catch (exc: Exception) {
@@ -69,7 +66,7 @@ open class HomeViewModel @Inject constructor(
                 } as ArrayList<Book>
                 
                 // Remove specific book with ID 1513
-                val index = filteredBooks.indexOfFirst { it.id == 1513 }
+                val index = filteredBooks.indexOfFirst { it.id == 1513L }
                 if (index != -1) {
                     filteredBooks.removeAt(index)
                 }
@@ -127,7 +124,7 @@ open class HomeViewModel @Inject constructor(
     }
     
     private suspend fun searchBooks(query: String) {
-        if (query.isBlank()) return // no need to search for empty query
+        if (query.isBlank()) return
         val bookSet = bookAPI.searchBooks(query)
         val books = bookSet.getOrNull()?.books?.filter { it.formats.applicationepubzip != null }
         searchBarState = searchBarState.copy(
