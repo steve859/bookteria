@@ -9,7 +9,27 @@
     <string name="get_started">Get Started</string>
     <string name="home_search_icon_desc">Search</string>
     <string name="cover_image">Cover Image</string>
-    <string name="error_no_connection">No Internet Connection</string>"
+    <string name="error_no_connection">No Internet Connection</string>
     <string name="error_retry">Retry</string>
     <string name="home_search_placeholder">Search books...</string>
+    
+    <!--Categories-->
+    <string name="category_animal">Animal</string>
+    <string name="category_children">Children</string>
+    <string name="category_classics">Classics</string>
+    <string name="category_countries">Countries</string>
+    <string name="category_crime">Crime</string>
+    <string name="category_education">Education</string>
+    <string name="category_fiction">Fiction</string>
+    <string name="category_geography">Geography</string>
+    <string name="category_history">History</string>
+    <string name="category_literature">Literature</string>
+    <string name="category_law">Law</string>
+    <string name="category_music">Music</string>
+    <string name="category_periodicals">Periodicals</string>
+    <string name="category_psychology">Psychology</string>
+    <string name="category_philosophy">Philosophy</string>
+    <string name="category_religion">Religion</string>
+    <string name="category_romance">Romance</string>
+    <string name="category_science">Science</string>
 </resources>
