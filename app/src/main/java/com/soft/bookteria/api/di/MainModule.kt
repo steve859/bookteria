@@ -5,6 +5,7 @@ import com.soft.bookteria.api.BookApi
 import com.soft.bookteria.database.BookteriaDatabase
 import com.soft.bookteria.database.library.LibraryDAO
 import com.soft.bookteria.database.progress.ProgressDAO
+import com.soft.bookteria.helpers.Downloader
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -36,5 +37,9 @@ class MainModule {
     fun provideProgressDAO(bookteriaDatabase: BookteriaDatabase): ProgressDAO {
         return bookteriaDatabase.progressDAO()
     }
+    
+    @Singleton
+    @Provides
+    fun provideDownloader(@ApplicationContext context: Context) = Downloader(context)
 
 }
