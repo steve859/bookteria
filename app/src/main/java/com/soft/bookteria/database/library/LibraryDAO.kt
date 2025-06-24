@@ -28,5 +28,7 @@ interface LibraryDAO {
     
     @Query("SELECT * FROM book_library WHERE id = :id")
     fun getObjectById(id: Int): LibraryObject?
-
+    
+    @Query("SELECT EXISTS(SELECT 1 FROM book_library WHERE book_id = :bookId)")
+    fun checkIfDownloaded(bookId: Long): Boolean
 }

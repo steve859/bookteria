@@ -17,7 +17,7 @@ data class ProgressData (
     val lastRead: Long = System.currentTimeMillis()
 ) {
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0
+    var id: Int = 0
 
     fun getProgressPercentage(totalChapters: Int) =
         String.format(

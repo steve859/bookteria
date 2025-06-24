@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.room.util.copy
 import com.soft.bookteria.api.BookApi
+import com.soft.bookteria.api.models.Book
 import com.soft.bookteria.api.models.BookCollection
 import com.soft.bookteria.database.library.LibraryDAO
 import com.soft.bookteria.helpers.Downloader
@@ -24,7 +25,7 @@ data class DetailsUIState(
 class DetailsViewModel @Inject constructor(
     private val bookAPI: BookApi,
     val libraryDao: LibraryDAO,
-    val bookDownloader: Downloader
+    val downloader: Downloader
 ) : ViewModel(){
     private val _uiState = MutableStateFlow(DetailsUIState())
     val uiState: StateFlow<DetailsUIState> = _uiState
@@ -34,12 +35,23 @@ class DetailsViewModel @Inject constructor(
     fun loadBookDetails(bookId: Long){
         viewModelScope.launch(Dispatchers.IO) {
             _uiState.value = DetailsUIState(isLoading = true)
-            try{
-                val bookCollection = bookAPI.getBookById(bookId).getOrNull()!!
-                //val extraInfo = bookAPI.
-                _uiState.value = DetailsUIState(bookCollection = bookCollection)
-            } catch (exc: Exception){
-                _uiState.value = DetailsUIState(error = exc.message)
+            try {
+                val bookCollection = bookAPI.getBookById(bookId).getOrNull()
+                if (bookCollection != null && bookCollection.books.isNotEmpty()) {
+                    _uiState.value = DetailsUIState(isLoading = false, bookCollection = bookCollection)
+                } else {
+                    _uiState.value = DetailsUIState(
+                        isLoading = false,
+                        bookCollection = BookCollection(0, null, null, emptyList()),
+                        error = "Book not found"
+                    )
+                }
+            } catch (exc: Exception) {
+                _uiState.value = DetailsUIState(
+                    isLoading = false,
+                    bookCollection = BookCollection(0, null, null, emptyList()),
+                    error = exc.localizedMessage ?: "Unknown error"
+                )
             }
         }
     }
@@ -48,6 +60,26 @@ class DetailsViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             _isDoawnloaded.value = libraryDao.checkIfDownloaded(bookdId)
         }
+    }
 
+    fun downloadBook(
+        book: Book,
+        onResult: (success: Boolean, message: String?) -> Unit,
+        downloadProgressListener: ((progress: Float, status: Int) -> Unit)? = null
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                downloader.downloadBook(
+                    book,
+                    onResult = { success, message ->
+                        if (success) _isDoawnloaded.value = true
+                        onResult(success, message)
+                    },
+                    downloadProgressListener = downloadProgressListener
+                )
+            } catch (e: Exception) {
+                onResult(false, e.localizedMessage)
+            }
+        }
     }
 }

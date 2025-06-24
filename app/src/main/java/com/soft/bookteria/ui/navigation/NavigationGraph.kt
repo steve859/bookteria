@@ -11,6 +11,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.soft.bookteria.helpers.NetworkObserver
 import com.soft.bookteria.ui.screens.categories.composables.CategoryDetailScreen
+import com.soft.bookteria.ui.screens.details.composables.DetailsScreen
 import com.soft.bookteria.ui.screens.main.MainScreen
 import com.soft.bookteria.ui.screens.welcome.composables.WelcomeScreen
 
@@ -52,6 +53,19 @@ fun NavigationGraph(
             CategoryDetailScreen(
                 navController = navController,
                 category = category
+            )
+        }
+        
+        composable(
+            route = NavigationScreens.BookDetailScreen.route,
+            arguments = listOf(
+                navArgument(BOOK_ID_ARG_KEY) { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val bookId = backStackEntry.arguments?.getString(BOOK_ID_ARG_KEY) ?: ""
+            DetailsScreen(
+                navController = navController,
+                bookId = bookId
             )
         }
     }

@@ -441,30 +441,33 @@ class FakeBookApi(context: Context) : BookApi(context) {
         Book(
             id = 100,
             title = "Lap trinh huong doi tuong",
-            authors = listOf(com.soft.bookteria.api.models.Author("Tran Anh Dung")),
+            authors = listOf(Author("Tran Anh Dung")),
             subjects = listOf("Coding"),
             bookshelves = emptyList(),
             copyright = false,
             downloadCount = 0,
             languages = listOf("en"),
             mediaType = "Text",
-            formats = com.soft.bookteria.api.models.Formats(
+            formats = Formats(
                 imagejpeg = "https://placehold.co/80x100.png"
-            )
+            ),
+            summaries = listOf("Tóm tắt 1", "Tóm tắt 2")
+            
         ),
         Book(
             id = 101,
             title = "NMLT",
-            authors = listOf(com.soft.bookteria.api.models.Author("Mai Tuan Kiet")),
+            authors = listOf(Author("Mai Tuan Kiet")),
             subjects = listOf("Coding"),
             bookshelves = emptyList(),
             copyright = false,
             downloadCount = 0,
             languages = listOf("en"),
             mediaType = "Text",
-            formats = com.soft.bookteria.api.models.Formats(
+            formats = Formats(
                 imagejpeg = "https://placehold.co/80x100.png"
-            )
+            ),
+            summaries = listOf("Tóm tắt 1", "Tóm tắt 2"),
         )
     )
     
@@ -502,30 +505,34 @@ class FakeHomeVM(context: Context) : HomeViewModel(bookAPI = FakeBookApi(context
                 Book(
                     id = 100,
                     title = "Demo Book One",
-                    authors = listOf(com.soft.bookteria.api.models.Author("Tác giả 1")),
+                    authors = listOf(Author("Tác giả 1")),
                     subjects = listOf("Thể loại A"),
                     bookshelves = emptyList(),
                     copyright = false,
                     downloadCount = 0,
                     languages = listOf("en"),
                     mediaType = "Text",
-                    formats = com.soft.bookteria.api.models.Formats(
+                    formats = Formats(
                         imagejpeg = "https://placehold.co/80x100.png"
-                    )
+                    ),
+                    summaries = listOf("Tóm tắt 1", "Tóm tắt 2")
+                    
                 ),
                 Book(
                     id = 101,
                     title = "Demo Book Two",
-                    authors = listOf(com.soft.bookteria.api.models.Author("Tác giả 2")),
+                    authors = listOf(Author("Tác giả 2")),
                     subjects = listOf("Thể loại B"),
                     bookshelves = emptyList(),
                     copyright = false,
                     downloadCount = 0,
                     languages = listOf("en"),
                     mediaType = "Text",
-                    formats = com.soft.bookteria.api.models.Formats(
+                    formats = Formats(
                         imagejpeg = "https://placehold.co/80x100.png"
-                    )
+                    ),
+                    summaries = listOf("Tóm tắt 1", "Tóm tắt 2")
+                    
                 )
             ),
             page = 1L,

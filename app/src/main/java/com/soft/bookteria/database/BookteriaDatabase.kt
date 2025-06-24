@@ -13,16 +13,16 @@ import com.soft.bookteria.database.progress.ProgressDAO
 import com.soft.bookteria.database.progress.ProgressData
 import com.soft.bookteria.helpers.Constants
 import com.soft.bookteria.helpers.Constants.DATABASE_NAME
-const val DATABASE_VERSION = 5
+const val DATABASE_VERSION = 1
 @Database(
     entities = [LibraryObject::class, ProgressData::class],
     version = DATABASE_VERSION,
     exportSchema = true,
-    autoMigrations = [
-        AutoMigration(from = 1, to = 2),
-        AutoMigration(from = 2, to = 3),
-        AutoMigration(from = 4, to = 5),
-    ]
+//    autoMigrations = [
+//        AutoMigration(from = 1, to = 2),
+//        AutoMigration(from = 2, to = 3),
+//        AutoMigration(from = 4, to = 5),
+//    ]
 )
 abstract class BookteriaDatabase : RoomDatabase() {
     abstract fun libraryDAO(): LibraryDAO
