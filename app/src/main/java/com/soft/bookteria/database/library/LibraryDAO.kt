@@ -17,8 +17,8 @@ interface LibraryDAO {
     @Query("SELECT * FROM book_library")
     fun getAll(): List<LibraryObject>
     
-    @Query("SELECT * FROM book_library WHERE book_id = :bookId")
-    fun getBookById(bookId: Int): LibraryObject?
+//    @Query("SELECT * FROM book_library WHERE book_id = :bookId")
+//    fun getBookById(bookId: Int): LibraryObject?
     
 //    @Query("SELECT * FROM book_library WHERE file_path = :filePath")
 //    fun getBookByFilePath(filePath: String): LibraryObject?
@@ -31,4 +31,8 @@ interface LibraryDAO {
     
     @Query("SELECT EXISTS(SELECT 1 FROM book_library WHERE book_id = :bookId)")
     fun checkIfDownloaded(bookId: Long): Boolean
+    
+    @Query("SELECT * FROM book_library WHERE book_id = :bookId")
+    fun getObjectByBookId(bookId: Int): LibraryObject?
+    
 }

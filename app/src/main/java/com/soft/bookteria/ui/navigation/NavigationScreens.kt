@@ -20,6 +20,12 @@ sealed class NavigationScreens(
         }
     }
     
+    data object ReaderDetailScreen : NavigationScreens("reader_detail_screen/{$LIBRARY_OBJECT_ID_ARG_KEY}"){
+        fun withLibraryObjectId(id: String): String{
+            return this.route.replace("{$LIBRARY_OBJECT_ID_ARG_KEY}", id)
+        }
+    }
+    
     data object ReaderScreen : NavigationScreens("reader_screen/{$LIBRARY_OBJECT_ID_ARG_KEY}"){
         fun withBookId(id: String): String{
             return this.route.replace("{$LIBRARY_OBJECT_ID_ARG_KEY}", id)

@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import androidx.room.Delete
 import com.soft.bookteria.database.library.LibraryObject
 import kotlinx.coroutines.flow.Flow
 
@@ -19,6 +20,12 @@ interface ProgressDAO {
     @Update
     fun update(progressData: ProgressData)
     
+    @Delete
+    fun delete(progressData: ProgressData)
+    
+    @Query("DELETE FROM reader_table WHERE library_object_id = :libraryObjectId")
+    fun deleteByLibraryObjectId(libraryObjectId: Int)
+    
     @Query("SELECT * FROM reader_table WHERE library_object_id = :libraryObjectId")
     fun getReaderData(libraryObjectId: Int): ProgressData?
     
@@ -27,4 +34,6 @@ interface ProgressDAO {
     
     @Query("SELECT * FROM reader_table WHERE library_object_id = :libraryObjectId")
     fun getReaderAsFlow(libraryObjectId: Int): Flow<ProgressData>?
+    
+    
 }
