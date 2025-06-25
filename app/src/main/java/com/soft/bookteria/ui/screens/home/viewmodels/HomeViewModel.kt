@@ -42,6 +42,7 @@ open class HomeViewModel @Inject constructor(
             try {
                 if (page == 1L) delay(400L)
                 bookAPI.getAllBooks(page) // Fixed to English only
+                
             } catch (exc: Exception) {
                 Result.failure(exc)
             }

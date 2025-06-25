@@ -13,6 +13,8 @@ import com.soft.bookteria.helpers.NetworkObserver
 import com.soft.bookteria.ui.screens.categories.composables.CategoryDetailScreen
 import com.soft.bookteria.ui.screens.details.composables.DetailsScreen
 import com.soft.bookteria.ui.screens.main.MainScreen
+import com.soft.bookteria.ui.screens.reader.ReaderDetailScreen
+import com.soft.bookteria.ui.screens.reader.ReaderScreen
 import com.soft.bookteria.ui.screens.welcome.composables.WelcomeScreen
 
 @Composable
@@ -66,6 +68,32 @@ fun NavigationGraph(
             DetailsScreen(
                 navController = navController,
                 bookId = bookId
+            )
+        }
+        
+        composable(
+            route = NavigationScreens.ReaderDetailScreen.route,
+            arguments = listOf(
+                navArgument(LIBRARY_OBJECT_ID_ARG_KEY) { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val libraryObjectId = backStackEntry.arguments?.getString(LIBRARY_OBJECT_ID_ARG_KEY) ?: ""
+            ReaderDetailScreen(
+                libraryObjectId = libraryObjectId,
+                navController = navController
+            )
+        }
+        
+        composable(
+            route = NavigationScreens.ReaderScreen.route,
+            arguments = listOf(
+                navArgument(LIBRARY_OBJECT_ID_ARG_KEY) { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val libraryObjectId = backStackEntry.arguments?.getString(LIBRARY_OBJECT_ID_ARG_KEY) ?: ""
+            ReaderScreen(
+                navController = navController,
+                libraryObjectId = libraryObjectId
             )
         }
     }
