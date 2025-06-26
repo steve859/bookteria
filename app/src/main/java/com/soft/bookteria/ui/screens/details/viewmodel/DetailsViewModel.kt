@@ -17,6 +17,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.File
 import javax.inject.Inject
 
 data class DetailsUIState(
@@ -38,6 +40,32 @@ class DetailsViewModel @Inject constructor(
     val uiState: StateFlow<DetailsUIState> = _uiState
     private val _isDoawnloaded = MutableStateFlow(false)
     val isDownloaded: StateFlow<Boolean> = _isDoawnloaded
+    
+    init {
+        // Dọn dẹp và sửa chữa khi ViewModel được khởi tạo
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                // Dọn dẹp file tạm
+                downloader.cleanupTempFiles()
+                
+                // Đảm bảo thư mục lưu trữ tồn tại
+                val directoriesOk = downloader.ensureDirectoriesExist()
+                if (!directoriesOk) {
+                    Log.e("DetailsViewModel", "Failed to prepare storage directories!")
+                }
+                
+                // Dọn dẹp cơ sở dữ liệu
+                libraryDao.cleanupMissingFiles()
+                
+                // Sửa chữa cơ sở dữ liệu (chạy không đồng bộ)
+                repairLibraryDatabase()
+                
+                Log.d("DetailsViewModel", "Initial cleanup and repair completed")
+            } catch (e: Exception) {
+                Log.e("DetailsViewModel", "Error during initial cleanup", e)
+            }
+        }
+    }
     
     fun loadBookDetails(bookId: Long){
         viewModelScope.launch(Dispatchers.IO) {
@@ -65,6 +93,15 @@ class DetailsViewModel @Inject constructor(
     
     fun checkIfDownloaded(bookId: Long) {
         viewModelScope.launch(Dispatchers.IO) {
+            // Trước tiên, dọn dẹp các mục thư viện với file không tồn tại
+            try {
+                libraryDao.cleanupMissingFiles()
+                Log.d("DetailsViewModel", "Cleaned up missing files in library")
+            } catch (e: Exception) {
+                Log.e("DetailsViewModel", "Error cleaning up missing files", e)
+            }
+            
+            // Kiểm tra lại xem sách có được tải xuống không
             val downloaded = libraryDao.checkIfDownloaded(bookId)
             Log.d("DetailsViewModel", "Book $bookId downloaded: $downloaded")
             _isDoawnloaded.value = downloaded
@@ -120,13 +157,56 @@ class DetailsViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(downloadMessage = null)
     }
     
+    // Không sử dụng trực tiếp, đã được thay thế bởi getLibraryObjectIdSuspend
+    // Giữ lại để tương thích ngược với code khác nếu có
     fun getLibraryObjectId(bookId: Long): Int? {
-        return try {
-            val libraryObject = libraryDao.getObjectByBookId(bookId.toInt())
-            Log.d("DetailsViewModel", "Queried libraryObject for bookId=$bookId: $libraryObject")
-            libraryObject?.id
-        } catch (e: Exception) {
-            null
+        Log.d("DetailsViewModel", "WARNING: Calling deprecated getLibraryObjectId on main thread!")
+        // Trả về null để buộc phải sử dụng hàm suspend thay thế
+        return null
+    }
+    
+    // Phương thức suspend để truy vấn database an toàn
+    suspend fun getLibraryObjectIdSuspend(bookId: Long): Int? {
+        return withContext(Dispatchers.IO) {
+            try {
+                Log.d("DetailsViewModel", "Getting library object for bookId=$bookId")
+                
+                // Đầu tiên thực hiện dọn dẹp để đảm bảo không có mục không hợp lệ
+                try {
+                    libraryDao.cleanupMissingFiles()
+                } catch (e: Exception) {
+                    Log.e("DetailsViewModel", "Error during cleanup", e)
+                }
+                
+                val libraryObject = libraryDao.getObjectByBookId(bookId.toInt())
+                Log.d("DetailsViewModel", "Queried libraryObject for bookId=$bookId: $libraryObject")
+                
+                if (libraryObject == null) {
+                    Log.e("DetailsViewModel", "Library object not found for bookId=$bookId")
+                    return@withContext null
+                }
+                
+                // Kiểm tra chi tiết file
+                val file = File(libraryObject.filePath)
+                val exists = file.exists()
+                val canRead = file.canRead()
+                val fileSize = file.length()
+                
+                Log.d("DetailsViewModel", "File check for ${libraryObject.title}: exists=$exists, canRead=$canRead, size=$fileSize bytes, path=${libraryObject.filePath}")
+                
+                // Check if the book file exists
+                if (!libraryObject.isExists()) {
+                    Log.e("DetailsViewModel", "Book file does not exist or is not readable at path: ${libraryObject.filePath}")
+                    // Xóa mục không hợp lệ khỏi cơ sở dữ liệu
+                    libraryDao.delete(libraryObject)
+                    return@withContext null
+                }
+                
+                libraryObject.id
+            } catch (e: Exception) {
+                Log.e("DetailsViewModel", "Error checking library object", e)
+                null
+            }
         }
     }
     
@@ -139,5 +219,50 @@ class DetailsViewModel @Inject constructor(
         } catch (e: Exception) {
             null
         }
+    }
+    
+    /**
+     * Sửa chữa cơ sở dữ liệu thư viện bằng cách:
+     * 1. Xóa các mục không có file thực tế
+     * 2. Kiểm tra tính hợp lệ của tất cả các file
+     * Trả về số lượng mục đã được xóa
+     */
+    fun repairLibraryDatabase(): Int {
+        var removedCount = 0
+        
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                // Đảm bảo thư mục lưu trữ tồn tại
+                downloader.ensureDirectoriesExist()
+                
+                // Lấy tất cả các mục thư viện
+                val allBooks = libraryDao.getAll()
+                Log.d("DetailsViewModel", "Starting library repair. Found ${allBooks.size} books in database")
+                
+                // Kiểm tra từng mục
+                for (book in allBooks) {
+                    val file = File(book.filePath)
+                    var isValid = file.exists() && file.canRead() && file.length() > 0
+                    
+                    // Nếu file tồn tại, còn kiểm tra nội dung
+                    if (isValid) {
+                        isValid = downloader.validateEpubFile(file)
+                    }
+                    
+                    // Nếu không hợp lệ, xóa khỏi cơ sở dữ liệu
+                    if (!isValid) {
+                        Log.w("DetailsViewModel", "Removing invalid book from library: ${book.title} (ID: ${book.id})")
+                        libraryDao.delete(book)
+                        removedCount++
+                    }
+                }
+                
+                Log.d("DetailsViewModel", "Library repair complete. Removed $removedCount invalid entries")
+            } catch (e: Exception) {
+                Log.e("DetailsViewModel", "Error during library repair", e)
+            }
+        }
+        
+        return removedCount
     }
 }

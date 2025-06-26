@@ -1,5 +1,6 @@
 package com.soft.bookteria.ui.screens.reader.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -14,6 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 data class ReaderUIState(
@@ -44,6 +46,15 @@ class ReaderViewModel @Inject constructor(
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,
                         error = "Book not found"
+                    )
+                    return@launch
+                }
+                
+                // Check if the book file actually exists
+                if (!libraryObject.isExists()) {
+                    _uiState.value = _uiState.value.copy(
+                        isLoading = false,
+                        error = "Cannot find downloaded Book. Please try again."
                     )
                     return@launch
                 }
@@ -116,4 +127,23 @@ class ReaderViewModel @Inject constructor(
             }
         }
     }
-} 
+    
+    // Phiên bản cũ, không an toàn cho UI thread
+    fun getBookIdFromLibraryId(libraryObjectId: Int): Long? {
+        Log.w("ReaderViewModel", "WARNING: Called non-suspend getBookIdFromLibraryId on main thread!")
+        return null
+    }
+    
+    // Phiên bản suspend an toàn cho tương tác database
+    suspend fun getBookIdFromLibraryIdSuspend(libraryObjectId: Int): Long? {
+        return withContext(Dispatchers.IO) {
+            try {
+                val libraryObject = libraryDAO.getObjectById(libraryObjectId)
+                libraryObject?.bookId?.toLong()
+            } catch (e: Exception) {
+                Log.e("ReaderViewModel", "Error getting bookId from libraryId", e)
+                null
+            }
+        }
+    }
+}
