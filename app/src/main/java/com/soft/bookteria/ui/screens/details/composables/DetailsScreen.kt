@@ -174,16 +174,18 @@ fun DetailsScreen(
                         onClick = {
                             Log.d("DetailScreenLog", "Button clicked. isDownloaded=$isDownloaded, bookId=${book.id}")
                             if (isDownloaded) {
-                                val libraryObjectId = viewModel.getLibraryObjectId(book.id)
-                                Log.d("DetailScreenLog", "Try open reader. getLibraryObjectId(${book.id}) = $libraryObjectId")
-                                if (libraryObjectId != null) {
-                                    // Điều hướng sang ReaderScreen với đúng id
-                                    navController.navigate(
-                                        com.soft.bookteria.ui.navigation.NavigationScreens.ReaderScreen.withBookId(libraryObjectId.toString())
-                                    )
-                                } else {
-                                    Log.e("DetailScreenLog", "libraryObjectId is null! Cannot open reader.")
-                                    scope.launch {
+                                // Sử dụng coroutine để thực hiện truy vấn database
+                                scope.launch {
+                                    val libraryObjectId = viewModel.getLibraryObjectIdSuspend(book.id)
+                                    Log.d("DetailScreenLog", "Try open reader. getLibraryObjectIdSuspend(${book.id}) = $libraryObjectId")
+                                    
+                                    if (libraryObjectId != null) {
+                                        // Điều hướng sang ReaderScreen với đúng id
+                                        navController.navigate(
+                                            com.soft.bookteria.ui.navigation.NavigationScreens.ReaderScreen.withBookId(libraryObjectId.toString())
+                                        )
+                                    } else {
+                                        Log.e("DetailScreenLog", "libraryObjectId is null! Cannot open reader.")
                                         snackbarHostState.showSnackbar("Cannot find downloaded book in library. Please try again.")
                                     }
                                 }

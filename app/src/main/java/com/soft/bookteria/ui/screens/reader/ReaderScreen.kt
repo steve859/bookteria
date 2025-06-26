@@ -18,6 +18,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import kotlinx.coroutines.launch
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -97,11 +98,80 @@ fun ReaderScreen(
                     .padding(padding),
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = uiState.error ?: "Unknown error",
-                    color = Color.Red,
-                    fontSize = 16.sp
-                )
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.padding(16.dp)
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_error),
+                        contentDescription = "Error",
+                        modifier = Modifier.size(48.dp),
+                        tint = MaterialTheme.colorScheme.error
+                    )
+                    
+                    Spacer(modifier = Modifier.height(8.dp))
+                    
+                    Text(
+                        text = uiState.error ?: "Unknown error",
+                        color = MaterialTheme.colorScheme.error,
+                        fontSize = 16.sp,
+                        textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                    )
+                    
+                    Spacer(modifier = Modifier.height(8.dp))
+                    
+                    Text(
+                        text = "Book file may have been deleted or corrupted",
+                        fontSize = 14.sp,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                        textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                    )
+                    
+                    Spacer(modifier = Modifier.height(24.dp))
+                    
+                    Button(
+                        onClick = {
+                            viewModel.loadBook(libraryObjectId.toInt())
+                        }
+                    ) {
+                        Text("Retry")
+                    }
+                    
+                    Spacer(modifier = Modifier.height(8.dp))
+                    
+                    val coroutineScope = rememberCoroutineScope()
+                    
+                    Button(
+                        onClick = {
+                            // Sử dụng coroutine để lấy bookId
+                            coroutineScope.launch {
+                                // Điều hướng tới màn hình chi tiết sách để tải lại
+                                val bookId = viewModel.getBookIdFromLibraryIdSuspend(libraryObjectId.toInt())
+                                if (bookId != null) {
+                                    navController.navigate(
+                                        com.soft.bookteria.ui.navigation.NavigationScreens.BookDetailScreen.withBookId(bookId.toString())
+                                    ) {
+                                        popUpTo(navController.graph.startDestinationId)
+                                    }
+                                } else {
+                                    navController.navigateUp()
+                                }
+                            }
+                        }
+                    ) {
+                        Text("Download Again")
+                    }
+                    
+                    Spacer(modifier = Modifier.height(8.dp))
+                    
+                    TextButton(
+                        onClick = {
+                            navController.navigateUp()
+                        }
+                    ) {
+                        Text("Go Back")
+                    }
+                }
             }
         } else {
             val libraryObject = uiState.libraryObject
@@ -487,4 +557,4 @@ fun ReaderScreenContentPreview() {
             }
         }
     }
-} 
+}

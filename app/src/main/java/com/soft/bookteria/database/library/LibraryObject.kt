@@ -1,6 +1,7 @@
 package com.soft.bookteria.database.library
 
 import android.icu.text.DateFormat
+import android.util.Log
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -27,7 +28,51 @@ data class LibraryObject (
     var id: Int = 0
     
     fun isExists(): Boolean {
-        return File(filePath).exists()
+        try {
+            val file = File(filePath)
+            
+            // Kiểm tra file có tồn tại không
+            if (!file.exists()) {
+                Log.e("LibraryObject", "File does not exist at path: $filePath")
+                return false
+            }
+            
+            // Kiểm tra file có thể đọc không
+            if (!file.canRead()) {
+                Log.e("LibraryObject", "File is not readable at path: $filePath")
+                return false
+            }
+            
+            // Kiểm tra kích thước file có > 0 không
+            val fileLength = file.length()
+            if (fileLength <= 0) {
+                Log.e("LibraryObject", "File is empty (size=$fileLength bytes) at path: $filePath")
+                return false
+            }
+            
+            // Kiểm tra nội dung file có thể đọc được không
+            try {
+                file.inputStream().use { inputStream ->
+                    // Đọc một số byte đầu tiên để xác nhận file có thể mở được
+                    val buffer = ByteArray(1024)
+                    val bytesRead = inputStream.read(buffer)
+                    
+                    if (bytesRead <= 0) {
+                        Log.e("LibraryObject", "File cannot be read properly at path: $filePath")
+                        return false
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e("LibraryObject", "Error reading file content: ${e.message}", e)
+                return false
+            }
+            
+            Log.d("LibraryObject", "File check SUCCESS - Path: $filePath, Size: $fileLength bytes")
+            return true
+        } catch (e: Exception) {
+            Log.e("LibraryObject", "Error checking if file exists: ${e.message}", e)
+            return false
+        }
     }
     
     fun deleteFile(): Boolean {
