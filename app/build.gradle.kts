@@ -89,6 +89,10 @@ dependencies {
     implementation(libs.android.material)
     implementation(libs.custom.activity.on.crash)
     
+    // EPUB Reading
+    implementation("com.github.mertakdut:EpubParser:1.0.95")
+    implementation("org.jsoup:jsoup:1.14.3")
+    
     // Testing
     testImplementation        (libs.junit)
     androidTestImplementation(libs.androidx.junit)
